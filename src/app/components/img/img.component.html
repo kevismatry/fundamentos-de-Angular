@@ -1,0 +1,8 @@
+<!-- eslint-disable @angular-eslint/template/alt-text -->
+<p>img works!</p>
+<h1>{{ img }}</h1>
+<img (load)="imgLoad()" (error)="imgError()" [src]="img"  *ngIf="img; else elseImg">
+<!--<h3>{{ counter }}</h3> -->
+<ng-template #elseImg>
+  <img [src]="imageDefault" alt="">
+</ng-template>

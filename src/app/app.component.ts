@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { product } from './product.model';
+
 
 
 @Component({
@@ -8,6 +8,18 @@ import { product } from './product.model';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  imgParent = '';
+  showImg = true;
+
+
+  // onLoaded(img: string) {
+
+  // }
+
+  toggleImg(){
+    this.showImg = !this.showImg;
+  }
+
   widthImg = 10;
   name = 'Facundo';
   age = 21;
@@ -30,39 +42,8 @@ export class AppComponent {
     height: 100,
     background: 'red'
   };
-  products: product[]  = [
-    {
-      name: 'EL mejor juguete',
-      price: 565,
-      image: '../assets/image/imagen 1.jpg',
-      category: 'all',
-    },
-    {
-      name: 'Bicicleta casi nueva',
-      price: 356,
-      image: '../assets/image/imagen 2.jpg'
-    },
-    {
-      name: 'Colleción de albumnes',
-      price: 34,
-      image: '../assets/image/imagen 3.jpg'
-    },
-    {
-      name: 'Mis libros',
-      price: 23,
-      image: '../assets/image/imagen 4.jpg'
-    },
-    {
-      name: 'Casa para perro',
-      price: 34,
-      image: '../assets/image/imagen 5.jpg'
-    },
-    {
-      name: 'Gafas',
-      price: 3434,
-      image: '../assets/image/glasses-657d9ca0-258e-4d6d-ba49-1a933caaeee9.jpg'
-    }
-  ]
+
+
 
   toggleButton() {
     this.btnDisable = !this.btnDisable;
@@ -74,7 +55,7 @@ export class AppComponent {
 
   onScroll(event: Event){
     const element = event.target as HTMLElement;
-    console.log(element.scrollTop)
+
   }
 
   changeName (event: Event) {
@@ -91,7 +72,11 @@ export class AppComponent {
     this.names.splice(index, 1);
   }
 
-  onRegister() {
-    console.log(this.register)
+  // onRegister() {
+
+  // }
+
+  ToggleImg(){
+    this.showImg = !this.showImg;
   }
 }
