@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Product, CreateProductDTO } from '../../models/product.model';
+import { Product, CreateProductDTO, UpdateProductDTO } from '../../models/product.model';
 
 
 import { StoreService } from '../../services/store.service';
@@ -34,7 +34,9 @@ export class ProductsComponent implements OnInit {
     creationAt: '',
     updatedAt: ''
   };
-
+  limit = 10;
+   offset = 0;
+   statusDetailt: 'loading' | 'success' | 'error' | 'init' = 'init';
 
   //today = new Date();
   //date = new Date(2021, 1, 21)
@@ -48,10 +50,10 @@ export class ProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.productsService.getAllproducts()
-    .subscribe( (data)  => {
+    this.productsService.getProductsByPage(10, 0)
+    .subscribe(data => {
       this.products = data;
-      console.log('allproducts:', data);
+      this.loadMore();
     });
   }
 
@@ -65,10 +67,13 @@ export class ProductsComponent implements OnInit {
   }
 
   onShowDetail(id: number) {
+    this.statusDetailt = 'loading';
    this.productsService.getProduct(id)
    .subscribe(data => {
     this.toggleProductDetail();
     this.productChosen = data;
+   }, error =>  {
+    console.error(error);
    })
   }
 
@@ -87,5 +92,37 @@ export class ProductsComponent implements OnInit {
       this.products.unshift(data);
     });
   }
+
+  updateProduct(){
+     const changes = {
+      title: 'change title',
+     }
+     const id = `${this.productChosen.id}`;
+     this.productsService.update(id, changes)
+     .subscribe(data => {
+      const productIndex = this.products.findIndex(item => item.id === this.productChosen.id);
+      this.products[productIndex] = data;
+      this.productChosen = data;
+     });
+  }
+
+   deleteproduct() {
+    const id = `${this.productChosen.id}`;
+    this.productsService.delete(id)
+    .subscribe(() => {
+      const productIndex = this.products.findIndex(item => item.id === this.productChosen.id);
+      this.products.splice(productIndex, 1);
+      this.showProductDetail = false;
+    })
+   }
+
+   loadMore(){
+    this.productsService.getProductsByPage(this.limit, this.offset)
+    .subscribe(data => {
+      this.products.concat(data);
+      this.offset += this.limit;
+    });
+   }
+
 
 }

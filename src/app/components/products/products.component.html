@@ -25,6 +25,7 @@
     (addedProduct)="onAddToShoppingCart(product)"
     (showProduct)="onShowDetail(product.id)"
   ></app-product>
+  <button (click)="loadMore()">Load mora</button>
 </div>
 <div class="product-detail" [class.active]="showProductDetail">
   <div *ngIf="productChosen">
@@ -38,5 +39,7 @@
         </ng-template>
       </swiper>
       <p>{{ productChosen.description }}</p>
+      <button (click)="updateProduct()">editar</button>
+      <button (click)="deleteproduct()">delete</button>
   </div>
 </div>
