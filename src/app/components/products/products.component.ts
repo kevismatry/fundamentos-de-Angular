@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { switchMap } from 'rxjs';
 
-import { Product, CreateProductDTO, UpdateProductDTO } from '../../models/product.model';
+import { Product, CreateProductDTO } from '../../models/product.model';
 
 
 import { StoreService } from '../../services/store.service';
@@ -57,6 +58,7 @@ export class ProductsComponent implements OnInit {
     });
   }
 
+
   onAddToShoppingCart(product: Product) {
     this.storeService.addProduct(product)
     this.total = this.storeService.getTotal();
@@ -66,16 +68,37 @@ export class ProductsComponent implements OnInit {
     this.showProductDetail = !this.showProductDetail;
   }
 
-  onShowDetail(id: number) {
+  onShowDetail(id: string){
     this.statusDetailt = 'loading';
+    this.toggleProductDetail();
    this.productsService.getProduct(id)
    .subscribe(data => {
     this.toggleProductDetail();
     this.productChosen = data;
-   }, error =>  {
-    console.error(error);
+    this.statusDetailt = 'success';
+   }, errorMsg =>  {
+    window.alert(errorMsg);
+    this.statusDetailt = 'error';
    })
   }
+
+  readAndUpdate(id: string) {
+    this.productsService.getProduct(id)
+    .pipe(
+      switchMap((product) =>  this.productsService.update(product.id.toString(), { title: 'change' }))
+    )
+    .subscribe(data => {
+       console.log(data);
+      });
+    this.productsService.fetchReadAndUpdate(id, {title: 'change'})
+      .subscribe(response => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const read = response[0];
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const update = response[1];
+      })
+  }
+
 
   createNewProduct() {
     const product: CreateProductDTO = {
@@ -124,5 +147,4 @@ export class ProductsComponent implements OnInit {
     });
    }
 
-
-}
+  }
